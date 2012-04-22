@@ -110,113 +110,18 @@ if (window.widget) {
 }
 
 
-$(function(){
-  var Cheat = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        text: "empty cheat...",
-      };
-    },
-    initialize: function() {
-      if (!this.get("cheats")) {
-        this.set({"cheats": this.defaults.cheats});
-      }
-    }
-  });
+var SheetVM = function() {
+    var self = this;
+    self.sections = [];
+    
+    self.init = function() {
+      var jsontext = widget.system('/bin/cat ~/.cheatwidget', null).outputString;
+      var data = JSON.parse(jsontext);
+      self.sections = data.sheet;
+    };
+    self.init();
+};
 
-  var Cheats = Backbone.Collection.extend({
-    model: Cheat,
-  });
-
-  var Section = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        title: "empty title...",
-      };
-    },
-    initialize: function() {
-      this.cheats = new Cheats;
-      if (!this.get("title")) {
-        this.set({"title": this.defaults.title});
-      }
-    }
-  });
-
-  var SectionList = Backbone.Collection.extend({
-    model: Section
-  });
-
-  var Sheet = new SectionList;
-
-  var CheatView = Backbone.View.extend({
-    tagName: "div",
-    template: _.template($('#item-template').html()),
-    initialize: function() {
-      this.model.bind('change', this.render, this);
-    },
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
-    },
-    clear: function() {
-      this.model.clear();
-    }
-  });
-
-  var SectionView = Backbone.View.extend({
-    tagName: "div",
-    template: _.template($('#section-template').html()),
-    initialize: function() {
-      this.model.cheats.bind('reset', this.addAll, this);
-      this.model.cheats.bind('all', this.render, this);
-      this.main = $('#main');
-      this.insertionPoint = this.$("#item-list");
-      this.addAll();
-    },
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      this.addAll();
-      return this;
-    },
-    addOne: function(cheat) {
-      var view = new CheatView({model: cheat});
-      this.$("#item-list").append(view.render().el);
-    },
-    addAll: function() {
-      this.model.cheats.each(this.addOne, this);
-    }
-  });
-
-
-  var AppView = Backbone.View.extend({
-    el: $("#contents"),
-    initialize: function() {
-      Sheet.bind('add', this.addOne, this);
-      Sheet.bind('reset', this.addAll, this);
-      Sheet.bind('all', this.render, this);
-      this.main = $('#main');
-    },
-    addAll: function() {
-      Sheet.each(this.addOne);
-    },
-    addOne: function(section) {
-      var view = new SectionView({model: section});
-      this.$("#section-list").append(view.render().el);
-    }
-  });
-
-  var App = new AppView;
-  
-  var jsontext = widget.system('/bin/cat ~/.cheatwidget', null).outputString;
-  
-  data = JSON.parse(jsontext);
-
-  for (i=0; i<data.sheet.length; i++) {
-    var section = data.sheet[i];
-    var sec = new Section({title: section.title});
-    Sheet.add(sec);
-    for (j=0; j<section.cheats.length; j++) {
-      sec.cheats.add({text: section.cheats[j]});
-    }
-  }
+$(function() {
+  ko.applyBindings(new SheetVM());
 });

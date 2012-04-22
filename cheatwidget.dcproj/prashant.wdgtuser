@@ -5,7 +5,7 @@
 	<key>Breakpoints</key>
 	<dict/>
 	<key>CYLastWindowPosition</key>
-	<string>{84, 104}</string>
+	<string>{10, 127}</string>
 	<key>ContentSplitViewGeometry</key>
 	<dict>
 		<key>ContentSplitViewConfig</key>
@@ -16,8 +16,8 @@
 		<integer>0</integer>
 		<key>sizes</key>
 		<array>
-			<string>{{0, 0}, {759, 99}}</string>
-			<string>{{0, 109}, {759, 587}}</string>
+			<string>{{0, 0}, {759, 192}}</string>
+			<string>{{0, 202}, {759, 494}}</string>
 		</array>
 	</dict>
 	<key>ContentViewType</key>
@@ -98,23 +98,30 @@
 				<integer>0</integer>
 				<integer>0</integer>
 			</array>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>3</integer>
+			</array>
 		</array>
 		<key>Objects view last selections</key>
 		<array>
 			<array>
 				<integer>0</integer>
 				<integer>0</integer>
-				<integer>2</integer>
+				<integer>0</integer>
 			</array>
 		</array>
 		<key>Opened Steps</key>
 		<array>
 			<integer>0</integer>
+			<integer>3</integer>
 		</array>
 		<key>Visible StackLayout Views</key>
 		<array>
 			<string>front</string>
 			<string>helloText</string>
+			<string>item-template</string>
 		</array>
 	</dict>
 </dict>
