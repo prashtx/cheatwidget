@@ -166,22 +166,11 @@ $(function(){
   var SectionView = Backbone.View.extend({
     tagName: "div",
     template: _.template($('#section-template').html()),
-    _addOne: function(thisref) {
-      return function(cheat) {
-        var view = new CheatView({model: cheat});
-        thisref.$el("#item-list").append(view.render().el);
-      }
-    },
     initialize: function() {
       this.model.cheats.bind('reset', this.addAll, this);
       this.model.cheats.bind('all', this.render, this);
       this.main = $('#main');
-      this.addOne = function(thisref) {
-        return function(cheat) {
-          var view = new CheatView({model: cheat});
-          thisref.$("#item-list").append(view.render().el);
-        }
-      }(this);
+      this.insertionPoint = this.$("#item-list");
       this.addAll();
     },
     render: function() {
@@ -189,8 +178,12 @@ $(function(){
       this.addAll();
       return this;
     },
+    addOne: function(cheat) {
+      var view = new CheatView({model: cheat});
+      this.$("#item-list").append(view.render().el);
+    },
     addAll: function() {
-      this.model.cheats.each(this.addOne);
+      this.model.cheats.each(this.addOne, this);
     }
   });
 
